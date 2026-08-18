@@ -1,5 +1,5 @@
 {
-  "name": "site-two",
+  "name": "site",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.3",
+    "@fontsource-variable/inter": "5.2.8",
     "@repo/ui": "workspace:*",
     "@tailwindcss/vite": "4.3.3",
     "astro": "7.2.2",

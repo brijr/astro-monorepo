@@ -1,32 +1,25 @@
 ---
 import { Container } from "@repo/ui";
 
-import SiteLayout from "../layouts/SiteLayout.astro";
-import { site } from "../site";
+import SiteLayout from "~/layouts/SiteLayout.astro";
 ---
 
-<SiteLayout>
+<SiteLayout title="Page not found" robots="noindex, follow">
   <main>
     <Container>
-      <h1>{site.name}</h1>
-      <p>{site.description}</p>
-      <p>Replace this page with your content.</p>
+      <h1>Page not found</h1>
+      <p>The page you requested does not exist.</p>
     </Container>
   </main>
 </SiteLayout>
 
 <style>
-  main {
-    padding-block: var(--space-page);
-  }
-
   h1 {
     margin: 0 0 0.75rem;
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 500;
     letter-spacing: -0.02em;
     line-height: 1.3;
-    text-wrap: balance;
   }
 
   p {
@@ -35,10 +28,5 @@ import { site } from "../site";
     color: var(--color-muted);
     font-size: 1rem;
     line-height: 1.55;
-    text-wrap: pretty;
-  }
-
-  p + p {
-    margin-top: 0.75rem;
   }
 </style>

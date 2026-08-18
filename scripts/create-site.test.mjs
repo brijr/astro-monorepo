@@ -167,10 +167,13 @@ test("substitutes identity in the real site-starter template", async (context) =
     rootDirectory,
   });
 
-  const siteTs = await readFile(path.join(destination, "src/site.ts"), "utf8");
-  assert.match(siteTs, /name: "Field Notes"/);
-  assert.match(siteTs, /url: "https:\/\/field-notes\.example"/);
-  assert.doesNotMatch(siteTs, /Site Starter|site-starter/);
+  const constants = await readFile(
+    path.join(destination, "src/lib/constants.ts"),
+    "utf8",
+  );
+  assert.match(constants, /SITE_NAME = "Field Notes"/);
+  assert.match(constants, /SITE_URL = "https:\/\/field-notes\.example"/);
+  assert.doesNotMatch(constants, /Site Starter|site-starter/);
 
   const wrangler = await readFile(
     path.join(destination, "wrangler.jsonc"),

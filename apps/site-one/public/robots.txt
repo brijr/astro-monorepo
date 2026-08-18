@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://site-one.example.com/sitemap-index.xml

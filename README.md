@@ -9,7 +9,7 @@ sites with `pnpm site:new`.
 
 ## What is included
 
-- Two small demo sites under `apps/`
+- One demo site under `apps/site`
 - A tested `site:new` generator backed by a neutral, buildable template
 - Shared Astro layout, container, prose, and semantic CSS tokens in `@repo/ui`
 - Shared strict Astro TypeScript and Prettier configuration in `@repo/config`
@@ -34,12 +34,11 @@ pnpm install
 pnpm dev
 ```
 
-That starts every app under `apps/` in parallel. The demos listen on
-`http://localhost:4321` (site-one) and `http://localhost:4322` (site-two).
-A single site is:
+That starts every app under `apps/` in parallel. The demo listens on
+`http://localhost:4321`. A single site is:
 
 ```bash
-pnpm --filter site-one dev
+pnpm --filter site dev
 ```
 
 Run the complete repository gate with:
@@ -67,7 +66,7 @@ After generation:
 
 1. Replace the starter page in `apps/<name>/src/pages/index.astro`.
 2. Set the site's visual identity in `apps/<name>/src/styles/theme.css` and
-   `themeColor` in `apps/<name>/src/site.ts`.
+   `THEME_COLOR` in `apps/<name>/src/lib/constants.ts`.
 3. Run `pnpm --filter <name> check` and `pnpm --filter <name> build`.
 4. Follow [the Workers Builds setup](docs/workers-builds.md).
 
@@ -75,8 +74,7 @@ After generation:
 
 ```text
 apps/
-  site-one/            independently deployable Astro site
-  site-two/            independently deployable Astro site
+  site/                independently deployable Astro site
 packages/
   config/              shared TypeScript and formatting config
   ui/                  neutral Astro and CSS primitives

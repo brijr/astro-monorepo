@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "site-two",
+  "name": "site",
   "compatibility_date": "2026-08-17",
   "workers_dev": true,
   "preview_urls": true,
