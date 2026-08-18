@@ -1,12 +1,12 @@
 :root {
   --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
-  --color-background: #eef3ff;
+  --color-background: #f7f8fb;
   --color-surface: #ffffff;
-  --color-text: #101a33;
-  --color-muted: #53617d;
-  --color-border: #c8d5ef;
+  --color-text: #16181d;
+  --color-muted: #5c6370;
+  --color-border: #d8dde6;
   --color-accent: #245cff;
   --radius: 0.25rem;
-  --content-width: 72rem;
-  --prose-width: 42rem;
+  --content-width: 40rem;
+  --prose-width: 36rem;
 }

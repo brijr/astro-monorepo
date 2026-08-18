@@ -31,13 +31,15 @@ run application code at request time.
 
 ```bash
 pnpm install
-pnpm --filter site-one dev
+pnpm dev
 ```
 
-The second demo can run alongside it on another port:
+That starts every app under `apps/` in parallel. The demos listen on
+`http://localhost:4321` (site-one) and `http://localhost:4322` (site-two).
+A single site is:
 
 ```bash
-pnpm --filter site-two dev --port 4322
+pnpm --filter site-one dev
 ```
 
 Run the complete repository gate with:
@@ -92,6 +94,7 @@ between apps and shared packages.
 | Command                            | Purpose                                     |
 | ---------------------------------- | ------------------------------------------- |
 | `pnpm site:new <name> --url <url>` | Generate a site                             |
+| `pnpm dev`                         | Run every app locally                       |
 | `pnpm --filter <name> dev`         | Run one site locally                        |
 | `pnpm --filter <name> preview`     | Build and preview through Wrangler          |
 | `pnpm --filter <name> deploy`      | Build and deploy one Worker                 |

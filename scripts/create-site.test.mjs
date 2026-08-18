@@ -14,7 +14,9 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import {
+  assignDevPort,
   createSite,
+  nextDevPort,
   parseArguments,
   validateSiteInput,
 } from "./create-site.mjs";
@@ -60,6 +62,33 @@ test("rejects invalid names and URLs", () => {
         url: "http://example.com/path",
       }),
     /HTTPS origin/,
+  );
+});
+
+test("assigns the next unused local port", async (context) => {
+  const appsDirectory = await mkdtemp(path.join(os.tmpdir(), "astro-ports-"));
+  context.after(() => rm(appsDirectory, { recursive: true, force: true }));
+
+  assert.equal(await nextDevPort(appsDirectory), 4321);
+
+  await mkdir(path.join(appsDirectory, "site-one"), { recursive: true });
+  await writeFile(
+    path.join(appsDirectory, "site-one", "astro.config.mjs"),
+    "server: { port: 4321 }\n",
+  );
+  await mkdir(path.join(appsDirectory, "site-two"), { recursive: true });
+  await writeFile(
+    path.join(appsDirectory, "site-two", "astro.config.mjs"),
+    "server: { port: 4322 }\n",
+  );
+
+  assert.equal(await nextDevPort(appsDirectory), 4323);
+  assert.match(
+    assignDevPort(
+      'output: "static",\n  server: {\n    port: 4399,\n  },',
+      4323,
+    ),
+    /port: 4323/,
   );
 });
 
@@ -154,4 +183,10 @@ test("substitutes identity in the real site-starter template", async (context) =
     "utf8",
   );
   assert.match(robots, /https:\/\/field-notes\.example\/sitemap-index\.xml/);
+
+  const config = await readFile(
+    path.join(destination, "astro.config.mjs"),
+    "utf8",
+  );
+  assert.match(config, /port: 4321/);
 });

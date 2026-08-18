@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "site:new": "node scripts/create-site.mjs",
+    "dev": "pnpm --filter \"./apps/**\" --parallel --stream dev",
     "build": "pnpm --recursive --if-present run build",
     "check": "pnpm --recursive --if-present run check",
     "format": "prettier --write .",
@@ -19,5 +20,10 @@
   "devDependencies": {
     "@repo/config": "workspace:*",
     "prettier": "3.9.6"
-  }
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "templates/*"
+  ]
 }

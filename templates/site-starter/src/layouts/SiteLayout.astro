@@ -1,5 +1,5 @@
 ---
-import { BaseLayout } from "@repo/ui";
+import { BaseLayout, Container } from "@repo/ui";
 
 import { site } from "../site";
 import "../styles/global.css";
@@ -25,4 +25,30 @@ const canonicalURL = new URL(Astro.url.pathname, site.url);
 >
   <slot name="head" slot="head" />
   <slot />
+  <footer>
+    <Container>
+      <a href={site.x} rel="me">Follow on X</a>
+    </Container>
+  </footer>
 </BaseLayout>
+
+<style>
+  footer {
+    padding-bottom: var(--space-page);
+  }
+
+  a {
+    color: var(--color-muted);
+    font-size: 0.875rem;
+    text-underline-offset: 0.18em;
+  }
+
+  a:hover {
+    color: var(--color-accent);
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+</style>

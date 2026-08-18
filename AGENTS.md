@@ -14,7 +14,7 @@ Cloudflare Workers with Static Assets.
 ## Commands
 
 - Use `pnpm site:new <name> --url <https-url> [--title <title>]` to add a site.
-- Use `pnpm --filter <name> dev` for local development.
+- Use `pnpm dev` to run every app, or `pnpm --filter <name> dev` for one site.
 - Run `pnpm verify` before handing off changes.
 - Use `astro check`, not raw `tsc`, as the Astro type/template gate.
 

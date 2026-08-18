@@ -1,12 +1,12 @@
 :root {
   --font-sans: Georgia, "Times New Roman", serif;
-  --color-background: #f4ead8;
-  --color-surface: #fffaf0;
-  --color-text: #281b13;
-  --color-muted: #725849;
-  --color-border: #d5bea2;
-  --color-accent: #b83f16;
-  --radius: 2rem;
-  --content-width: 64rem;
-  --prose-width: 38rem;
+  --color-background: #faf8f4;
+  --color-surface: #ffffff;
+  --color-text: #241c16;
+  --color-muted: #6a5b50;
+  --color-border: #e2d8cc;
+  --color-accent: #9a3b16;
+  --radius: 0.25rem;
+  --content-width: 40rem;
+  --prose-width: 36rem;
 }

@@ -1,5 +1,5 @@
 ---
-import { Container, Prose } from "@repo/ui";
+import { Container } from "@repo/ui";
 
 import SiteLayout from "../layouts/SiteLayout.astro";
 ---
@@ -7,24 +7,45 @@ import SiteLayout from "../layouts/SiteLayout.astro";
 <SiteLayout title="Page not found" robots="noindex, follow">
   <main>
     <Container>
-      <p class="code">404</p>
-      <Prose>
-        <h1>Page not found</h1>
-        <p>The page you requested does not exist.</p>
-        <p><a href="/">Return home</a></p>
-      </Prose>
+      <h1>Page not found</h1>
+      <p>The page you requested does not exist.</p>
+      <p><a href="/">Home</a></p>
     </Container>
   </main>
 </SiteLayout>
 
 <style>
   main {
-    padding-block: 20vh;
+    padding-block: var(--space-page);
   }
 
-  .code {
+  h1 {
+    margin: 0 0 0.75rem;
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  p {
+    max-width: var(--prose-width);
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  p + p {
+    margin-top: 0.75rem;
+  }
+
+  a {
     color: var(--color-accent);
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    text-underline-offset: 0.18em;
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
   }
 </style>

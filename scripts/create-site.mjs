@@ -17,6 +17,7 @@ import { fileURLToPath } from "node:url";
 const TEMPLATE_NAME = "site-starter";
 const TEMPLATE_TITLE = "Site Starter";
 const TEMPLATE_URL = "https://site-starter.example.com";
+const FIRST_DEV_PORT = 4321;
 const IGNORED_TEMPLATE_DIRECTORIES = new Set([
   ".astro",
   ".wrangler",
@@ -93,6 +94,41 @@ export function validateSiteInput({ name, title, url }) {
   };
 }
 
+export function assignDevPort(source, port) {
+  if (/\bport:\s*\d+/.test(source)) {
+    return source.replace(/(\bport:\s*)\d+/, `$1${port}`);
+  }
+
+  return source.replace(
+    /(\n  output: "static",)/,
+    `$1\n  server: {\n    port: ${port},\n  },`,
+  );
+}
+
+export async function nextDevPort(appsDirectory) {
+  const used = new Set();
+
+  if (await exists(appsDirectory)) {
+    const entries = await readdir(appsDirectory, { withFileTypes: true });
+    for (const entry of entries) {
+      if (!entry.isDirectory() || entry.name.startsWith(".")) continue;
+      const configPath = path.join(
+        appsDirectory,
+        entry.name,
+        "astro.config.mjs",
+      );
+      if (!(await exists(configPath))) continue;
+      const source = await readFile(configPath, "utf8");
+      const match = source.match(/\bport:\s*(\d+)/);
+      if (match) used.add(Number(match[1]));
+    }
+  }
+
+  let port = FIRST_DEV_PORT;
+  while (used.has(port)) port += 1;
+  return port;
+}
+
 async function exists(target) {
   try {
     await stat(target);
@@ -155,6 +191,13 @@ export async function createSite({ name, title, url, rootDirectory }) {
         .replaceAll(TEMPLATE_TITLE, input.title)
         .replaceAll(TEMPLATE_NAME, input.name);
       await writeFile(file, output);
+    }
+
+    const configPath = path.join(stagingDirectory, "astro.config.mjs");
+    if (await exists(configPath)) {
+      const port = await nextDevPort(appsDirectory);
+      const source = await readFile(configPath, "utf8");
+      await writeFile(configPath, assignDevPort(source, port));
     }
 
     await rename(stagingDirectory, destination);
