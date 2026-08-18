@@ -56,9 +56,17 @@ import { site } from "../site";
     background: var(--color-surface);
     padding: 0.85rem 1rem;
     text-decoration: none;
+    transition-property: border-color;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
 
   .callout:hover {
     border-color: var(--color-accent);
+  }
+
+  .callout:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
   }
 </style>

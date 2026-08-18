@@ -4,6 +4,9 @@ A starter for building and independently deploying multiple static Astro sites
 from one pnpm workspace. Every site is its own Cloudflare Worker; shared
 packages provide a quality floor without forcing the sites to look alike.
 
+Use the GitHub **Use this template** button, or clone the repository and add
+sites with `pnpm site:new`.
+
 ## What is included
 
 - Two small demo sites under `apps/`
@@ -11,6 +14,7 @@ packages provide a quality floor without forcing the sites to look alike.
 - Shared Astro layout, container, prose, and semantic CSS tokens in `@repo/ui`
 - Shared strict Astro TypeScript and Prettier configuration in `@repo/config`
 - Tailwind CSS v4 in every site
+- Open Graph, Twitter, canonical, robots, and sitemap metadata in the shared layout
 - Cloudflare Workers Static Assets configuration per site
 - CI for formatting, generator tests, Astro checks, and production builds
 
@@ -33,7 +37,7 @@ pnpm --filter site-one dev
 The second demo can run alongside it on another port:
 
 ```bash
-pnpm --filter site-two dev -- --port 4322
+pnpm --filter site-two dev --port 4322
 ```
 
 Run the complete repository gate with:
@@ -60,7 +64,8 @@ overwrite an existing app.
 After generation:
 
 1. Replace the starter page in `apps/<name>/src/pages/index.astro`.
-2. Set the site's visual identity in `apps/<name>/src/styles/theme.css`.
+2. Set the site's visual identity in `apps/<name>/src/styles/theme.css` and
+   `themeColor` in `apps/<name>/src/site.ts`.
 3. Run `pnpm --filter <name> check` and `pnpm --filter <name> build`.
 4. Follow [the Workers Builds setup](docs/workers-builds.md).
 
@@ -101,3 +106,7 @@ This starter intentionally targets static sites. If a site needs API routes,
 runtime rendering, or Cloudflare bindings, treat that as an app-level migration:
 install and configure `@astrojs/cloudflare`, update its Wrangler entry point and
 assets binding, and keep the other sites static.
+
+## License
+
+MIT. See [LICENSE](LICENSE).

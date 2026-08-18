@@ -5,22 +5,45 @@ interface Props {
   title: string;
   description: string;
   canonicalURL: string | URL;
+  siteName?: string;
+  themeColor?: string;
+  robots?: string;
   language?: string;
 }
 
-const { title, description, canonicalURL, language = "en" } = Astro.props;
+const {
+  title,
+  description,
+  canonicalURL,
+  siteName = title,
+  themeColor,
+  robots = "index, follow",
+  language = "en",
+} = Astro.props;
+
+const canonicalHref = String(canonicalURL);
 ---
 
 <!doctype html>
 <html lang={language}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    {themeColor && <meta name="theme-color" content={themeColor} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={canonicalURL} />
+    <link rel="canonical" href={canonicalHref} />
     <title>{title}</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalHref} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <slot name="head" />
   </head>
   <body>

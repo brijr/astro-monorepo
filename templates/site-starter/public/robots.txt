@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://site-starter.example.com/sitemap-index.xml

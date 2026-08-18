@@ -7,12 +7,22 @@ import "../styles/global.css";
 interface Props {
   title?: string;
   description?: string;
+  robots?: string;
 }
 
-const { title = site.name, description = site.description } = Astro.props;
+const { title, description = site.description, robots } = Astro.props;
+const documentTitle = title ? `${title} \u00b7 ${site.name}` : site.name;
 const canonicalURL = new URL(Astro.url.pathname, site.url);
 ---
 
-<BaseLayout {title} {description} {canonicalURL}>
+<BaseLayout
+  title={documentTitle}
+  description={description}
+  canonicalURL={canonicalURL}
+  siteName={site.name}
+  themeColor={site.themeColor}
+  robots={robots}
+>
+  <slot name="head" slot="head" />
   <slot />
 </BaseLayout>

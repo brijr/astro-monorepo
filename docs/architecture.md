@@ -17,7 +17,10 @@ to one app does not require a release of another app.
 
 Each app assigns the actual color, font, radius, and width values in
 `src/styles/theme.css`. Shared components style against those values. Do not add
-brand-specific choices to `@repo/ui`.
+brand-specific choices to `@repo/ui`. Dark palettes are an app-level opt-in:
+set `color-scheme: light dark` and `light-dark()` values in that theme file.
+The shared token sheet stays light-only so generated sites do not advertise a
+dark theme they have not defined.
 
 `@repo/config` owns strict Astro TypeScript and formatting policy. App-specific
 integrations stay in the app's Astro configuration.

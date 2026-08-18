@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {
   access,
+  cp,
   mkdtemp,
   mkdir,
   readFile,
@@ -9,6 +10,7 @@ import {
 } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
 
 import {
@@ -107,4 +109,49 @@ test("creates a fully substituted site and rejects collisions", async (context) 
     }),
     /already exists/,
   );
+});
+
+test("substitutes identity in the real site-starter template", async (context) => {
+  const repoRoot = path.resolve(fileURLToPath(import.meta.url), "..", "..");
+  const rootDirectory = await mkdtemp(
+    path.join(os.tmpdir(), "astro-site-real-"),
+  );
+  context.after(() => rm(rootDirectory, { recursive: true, force: true }));
+
+  const ignored = new Set([".astro", ".wrangler", "dist", "node_modules"]);
+  await mkdir(path.join(rootDirectory, "templates"), { recursive: true });
+  await cp(
+    path.join(repoRoot, "templates", "site-starter"),
+    path.join(rootDirectory, "templates", "site-starter"),
+    {
+      recursive: true,
+      filter(source) {
+        return !source.split(path.sep).some((part) => ignored.has(part));
+      },
+    },
+  );
+
+  const destination = await createSite({
+    name: "field-notes",
+    title: "Field Notes",
+    url: "https://field-notes.example",
+    rootDirectory,
+  });
+
+  const siteTs = await readFile(path.join(destination, "src/site.ts"), "utf8");
+  assert.match(siteTs, /name: "Field Notes"/);
+  assert.match(siteTs, /url: "https:\/\/field-notes\.example"/);
+  assert.doesNotMatch(siteTs, /Site Starter|site-starter/);
+
+  const wrangler = await readFile(
+    path.join(destination, "wrangler.jsonc"),
+    "utf8",
+  );
+  assert.match(wrangler, /"name": "field-notes"/);
+
+  const robots = await readFile(
+    path.join(destination, "public/robots.txt"),
+    "utf8",
+  );
+  assert.match(robots, /https:\/\/field-notes\.example\/sitemap-index\.xml/);
 });
