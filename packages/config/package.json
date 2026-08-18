@@ -1,0 +1,17 @@
+{
+  "name": "@repo/config",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./prettier": "./prettier/index.mjs",
+    "./tsconfig": "./tsconfig/base.json"
+  },
+  "dependencies": {
+    "astro": "7.2.2",
+    "prettier-plugin-astro": "0.14.1"
+  },
+  "peerDependencies": {
+    "prettier": "3.9.6"
+  }
+}

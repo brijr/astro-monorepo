@@ -1,0 +1,49 @@
+:root {
+  color-scheme: light dark;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --color-background: #f6f6f3;
+  --color-surface: #ffffff;
+  --color-text: #171714;
+  --color-muted: #5d5d55;
+  --color-border: #d9d9d0;
+  --color-accent: #315efb;
+  --radius: 0.75rem;
+  --content-width: 72rem;
+  --prose-width: 42rem;
+  --space-page: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 20rem;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-surface);
+}

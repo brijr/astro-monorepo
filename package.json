@@ -1,0 +1,23 @@
+{
+  "name": "astro-cloudflare-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "site:new": "node scripts/create-site.mjs",
+    "build": "pnpm --recursive --if-present run build",
+    "check": "pnpm --recursive --if-present run check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "node --test scripts/*.test.mjs",
+    "verify": "pnpm format:check && pnpm test && pnpm check && pnpm build"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@11.5.2",
+  "devDependencies": {
+    "@repo/config": "workspace:*",
+    "prettier": "3.9.6"
+  }
+}

@@ -1,0 +1,31 @@
+<div class="ui-prose">
+  <slot />
+</div>
+
+<style>
+  .ui-prose {
+    max-width: var(--prose-width);
+    color: var(--color-muted);
+    font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem);
+    line-height: 1.7;
+  }
+
+  .ui-prose :global(h1),
+  .ui-prose :global(h2),
+  .ui-prose :global(h3) {
+    color: var(--color-text);
+    font-weight: 650;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  .ui-prose :global(a) {
+    color: var(--color-accent);
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.18em;
+  }
+
+  .ui-prose :global(* + *) {
+    margin-block-start: 1em;
+  }
+</style>

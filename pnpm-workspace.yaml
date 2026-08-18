@@ -1,0 +1,17 @@
+packages:
+  - apps/*
+  - packages/*
+  - templates/*
+
+# Keep native toolchain packages available in local installs and Cloudflare's
+# pnpm 10 build image. pnpm 11 reads allowBuilds; older pnpm reads
+# onlyBuiltDependencies and ignores the newer key.
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd
+
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true

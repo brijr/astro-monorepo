@@ -1,0 +1,29 @@
+---
+import "../styles/tokens.css";
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalURL: string | URL;
+  language?: string;
+}
+
+const { title, description, canonicalURL, language = "en" } = Astro.props;
+---
+
+<!doctype html>
+<html lang={language}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+    <title>{title}</title>
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,30 @@
+---
+import { Container, Prose } from "@repo/ui";
+
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout title="Page not found">
+  <main>
+    <Container>
+      <p class="code">404</p>
+      <Prose>
+        <h1>Page not found</h1>
+        <p>The page you requested does not exist.</p>
+        <p><a href="/">Return home</a></p>
+      </Prose>
+    </Container>
+  </main>
+</SiteLayout>
+
+<style>
+  main {
+    padding-block: 20vh;
+  }
+
+  .code {
+    color: var(--color-accent);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+</style>

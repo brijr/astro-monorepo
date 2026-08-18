@@ -1,0 +1,18 @@
+---
+import { BaseLayout } from "@repo/ui";
+
+import { site } from "../site";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.name, description = site.description } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, site.url);
+---
+
+<BaseLayout {title} {description} {canonicalURL}>
+  <slot />
+</BaseLayout>
