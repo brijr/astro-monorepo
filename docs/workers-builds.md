@@ -52,13 +52,26 @@ a site from claiming a domain during its first automated deployment.
 
 ## Local deployment commands
 
-Authenticate Wrangler, then deploy one app directly when needed:
+Authenticate Wrangler first:
+
+```bash
+pnpm exec wrangler login
+```
+
+If this login has several Cloudflare accounts, set the account before deploy:
+
+```bash
+export CLOUDFLARE_ACCOUNT_ID=...
+pnpm deploy field-notes
+```
+
+`pnpm site:cf field-notes` prints the dashboard settings for that app. A dry-run
+validates the build and Wrangler configuration without uploading a new Worker
+version:
 
 ```bash
 pnpm --filter field-notes deploy:dry-run
-pnpm --filter field-notes deploy
 ```
 
-The dry-run validates the build and Wrangler configuration without uploading a
-new Worker version. A real deployment changes Cloudflare state; run it only for
-the intended account and Worker.
+A real deployment changes Cloudflare state; run it only for the intended
+account and Worker.

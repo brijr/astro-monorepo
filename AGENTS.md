@@ -14,7 +14,14 @@ Cloudflare Workers with Static Assets.
 ## Commands
 
 - Use `pnpm site:new <name> --url <https-url> [--title <title>]` to add a site.
-- Use `pnpm dev` to run every app, or `pnpm --filter <name> dev` for one site.
+  Omit flags to be prompted. Use `--dev` to start the new site.
+- Use `pnpm site:list`, `pnpm site:cf <name>`, and `pnpm site:rm <name>` to
+  inspect or remove apps. Never delete `templates/site-starter`.
+- Use `pnpm dev` to run every app, print each local URL, and open them in the
+  default browser. It stops leftover Astro servers on those ports first.
+  `DEV_NO_OPEN=1` skips the browser. Use `pnpm --filter <name> dev` for one site.
+- Use `pnpm preview <name>` and `pnpm deploy <name>` from the repo root. If this
+  login has several Cloudflare accounts, set `CLOUDFLARE_ACCOUNT_ID`.
 - Run `pnpm verify` before handing off changes.
 - Use `astro check`, not raw `tsc`, as the Astro type/template gate.
 

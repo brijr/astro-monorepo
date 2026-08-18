@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --open",
     "build": "astro build",
     "check": "astro check",
     "preview": "pnpm run build && wrangler dev",
@@ -12,18 +12,18 @@
     "deploy:dry-run": "pnpm run build && wrangler deploy --dry-run"
   },
   "dependencies": {
-    "@astrojs/sitemap": "3.7.3",
-    "@fontsource-variable/inter": "5.2.8",
+    "@astrojs/sitemap": "catalog:",
+    "@fontsource-variable/inter": "catalog:",
     "@repo/ui": "workspace:*",
-    "@tailwindcss/vite": "4.3.3",
-    "astro": "7.2.2",
-    "tailwindcss": "4.3.3"
+    "@tailwindcss/vite": "catalog:",
+    "astro": "catalog:",
+    "tailwindcss": "catalog:"
   },
   "devDependencies": {
-    "@astrojs/check": "0.9.10",
+    "@astrojs/check": "catalog:",
     "@repo/config": "workspace:*",
-    "typescript": "6.0.3",
-    "wrangler": "4.123.0"
+    "typescript": "catalog:",
+    "wrangler": "catalog:"
   },
   "engines": {
     "node": ">=22"

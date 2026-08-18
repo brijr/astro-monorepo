@@ -5,9 +5,12 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./base-layout": "./src/layouts/BaseLayout.astro",
+    "./container": "./src/components/Container.astro",
+    "./prose": "./src/components/Prose.astro",
     "./styles/tokens.css": "./src/styles/tokens.css"
   },
   "peerDependencies": {
-    "astro": "7.2.2"
+    "astro": "catalog:"
   }
 }

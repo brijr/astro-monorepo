@@ -15,6 +15,10 @@ to one app does not require a release of another app.
 - `Prose` — long-form typography structure
 - semantic token names and browser defaults
 
+Apps import those modules from deep paths (`@repo/ui/container`,
+`@repo/ui/base-layout`, `@repo/ui/prose`) so unused primitives stay out of
+the page graph. The package root export remains for scripts and docs.
+
 Each app assigns the actual color, font, radius, and width values in
 `src/styles/theme.css`. Shared components style against those values. Do not add
 brand-specific choices to `@repo/ui`. Dark palettes are an app-level opt-in:

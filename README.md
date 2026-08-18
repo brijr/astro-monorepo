@@ -34,8 +34,10 @@ pnpm install
 pnpm dev
 ```
 
-That starts every app under `apps/` in parallel. The demo listens on
-`http://localhost:4321`. A single site is:
+That stops leftover Astro servers on those ports, starts every app under
+`apps/`, prints each local URL, and opens those URLs in your default browser.
+The demo is `http://localhost:4321`. Set `DEV_NO_OPEN=1` to skip the browser.
+A single site, also opened in the browser, is:
 
 ```bash
 pnpm --filter site dev
@@ -53,9 +55,12 @@ pnpm verify
 pnpm site:new field-notes \
   --url https://field-notes.example \
   --title "Field Notes"
-pnpm install
-pnpm --filter field-notes dev
 ```
+
+That copies the template, assigns the next local port, runs `pnpm install`, and
+prints the local URL plus the Workers Builds settings. Omit the flags to be
+prompted. `--dev` starts the new site afterward. `--no-install` skips the
+workspace install.
 
 The name must be kebab-case and the URL must be an HTTPS origin without a
 path, query, or hash. `--title` is optional and defaults to a title-cased form
@@ -67,8 +72,8 @@ After generation:
 1. Replace the starter page in `apps/<name>/src/pages/index.astro`.
 2. Set the site's visual identity in `apps/<name>/src/styles/theme.css` and
    `THEME_COLOR` in `apps/<name>/src/lib/constants.ts`.
-3. Run `pnpm --filter <name> check` and `pnpm --filter <name> build`.
-4. Follow [the Workers Builds setup](docs/workers-builds.md).
+3. Run `pnpm site:check <name>` and `pnpm --filter <name> build`.
+4. Connect the Worker with [the printed Workers Builds settings](docs/workers-builds.md).
 
 ## Repository structure
 
@@ -81,7 +86,9 @@ packages/
 templates/
   site-starter/        validated source for site:new
 scripts/
-  create-site.mjs      atomic site generator
+  create-site.mjs      site:new generator
+  dev.mjs              pnpm dev
+  site.mjs             list, remove, preview, deploy, check, CF recipe
 ```
 
 See [the architecture notes](docs/architecture.md) for the ownership boundary
@@ -91,14 +98,18 @@ between apps and shared packages.
 
 | Command                            | Purpose                                     |
 | ---------------------------------- | ------------------------------------------- |
-| `pnpm site:new <name> --url <url>` | Generate a site                             |
-| `pnpm dev`                         | Run every app locally                       |
+| `pnpm site:new <name> --url <url>` | Generate a site, install, print CF settings |
+| `pnpm site:list`                   | List apps, local URLs, and Worker names     |
+| `pnpm site:cf [<name>]`            | Print Workers Builds settings               |
+| `pnpm site:rm <name>`              | Remove an app                               |
+| `pnpm site:check [<name>]`         | `astro check` one site                      |
+| `pnpm dev`                         | Run every app, print URLs, open the browser |
+| `pnpm preview [<name>]`            | Build and preview through Wrangler          |
+| `pnpm deploy [<name>]`             | Build and deploy one Worker                 |
 | `pnpm --filter <name> dev`         | Run one site locally                        |
-| `pnpm --filter <name> preview`     | Build and preview through Wrangler          |
-| `pnpm --filter <name> deploy`      | Build and deploy one Worker                 |
 | `pnpm check`                       | Run `astro check` in every app and template |
 | `pnpm build`                       | Build every app and template                |
-| `pnpm test`                        | Test the generator                          |
+| `pnpm test`                        | Test the generator and site CLI             |
 | `pnpm verify`                      | Run the complete repository gate            |
 
 ## Adding server behavior later

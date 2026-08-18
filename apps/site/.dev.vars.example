@@ -1,0 +1,6 @@
+# Local-only Worker bindings. This starter is static, so leave this empty
+# unless an app later adds runtime bindings.
+#
+# Account selection for `wrangler deploy` is an environment variable, not a
+# binding. If this login has several Cloudflare accounts:
+#   export CLOUDFLARE_ACCOUNT_ID=...

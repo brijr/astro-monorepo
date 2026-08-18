@@ -4,6 +4,39 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@astrojs/check':
+      specifier: 0.9.10
+      version: 0.9.10
+    '@astrojs/sitemap':
+      specifier: 3.7.3
+      version: 3.7.3
+    '@fontsource-variable/inter':
+      specifier: 5.2.8
+      version: 5.2.8
+    '@tailwindcss/vite':
+      specifier: 4.3.3
+      version: 4.3.3
+    astro:
+      specifier: 7.2.2
+      version: 7.2.2
+    prettier:
+      specifier: 3.9.6
+      version: 3.9.6
+    prettier-plugin-astro:
+      specifier: 0.14.1
+      version: 0.14.1
+    tailwindcss:
+      specifier: 4.3.3
+      version: 4.3.3
+    typescript:
+      specifier: 6.0.3
+      version: 6.0.3
+    wrangler:
+      specifier: 4.123.0
+      version: 4.123.0
+
 importers:
 
   .:
@@ -12,155 +45,93 @@ importers:
         specifier: workspace:*
         version: link:packages/config
       prettier:
-        specifier: 3.9.6
+        specifier: 'catalog:'
         version: 3.9.6
 
   apps/site:
     dependencies:
       '@astrojs/sitemap':
-        specifier: 3.7.3
+        specifier: 'catalog:'
         version: 3.7.3
       '@fontsource-variable/inter':
-        specifier: 5.2.8
+        specifier: 'catalog:'
         version: 5.2.8
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       '@tailwindcss/vite':
-        specifier: 4.3.3
+        specifier: 'catalog:'
         version: 4.3.3(vite@8.2.1(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.0))
       astro:
-        specifier: 7.2.2
+        specifier: 'catalog:'
         version: 7.2.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.3)(jiti@2.7.0)(yaml@2.9.0)
       tailwindcss:
-        specifier: 4.3.3
+        specifier: 'catalog:'
         version: 4.3.3
     devDependencies:
       '@astrojs/check':
-        specifier: 0.9.10
+        specifier: 'catalog:'
         version: 0.9.10(prettier-plugin-astro@0.14.1)(prettier@3.9.6)(typescript@6.0.3)
       '@repo/config':
         specifier: workspace:*
         version: link:../../packages/config
       typescript:
-        specifier: 6.0.3
+        specifier: 'catalog:'
         version: 6.0.3
       wrangler:
-        specifier: 4.123.0
-        version: 4.123.0
-
-  apps/site-one:
-    dependencies:
-      '@astrojs/sitemap':
-        specifier: 3.7.3
-        version: 3.7.3
-      '@repo/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
-      '@tailwindcss/vite':
-        specifier: 4.3.3
-        version: 4.3.3(vite@8.2.1(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.0))
-      astro:
-        specifier: 7.2.2
-        version: 7.2.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.3)(jiti@2.7.0)(yaml@2.9.0)
-      tailwindcss:
-        specifier: 4.3.3
-        version: 4.3.3
-    devDependencies:
-      '@astrojs/check':
-        specifier: 0.9.10
-        version: 0.9.10(prettier-plugin-astro@0.14.1)(prettier@3.9.6)(typescript@6.0.3)
-      '@repo/config':
-        specifier: workspace:*
-        version: link:../../packages/config
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      wrangler:
-        specifier: 4.123.0
-        version: 4.123.0
-
-  apps/site-two:
-    dependencies:
-      '@astrojs/sitemap':
-        specifier: 3.7.3
-        version: 3.7.3
-      '@repo/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
-      '@tailwindcss/vite':
-        specifier: 4.3.3
-        version: 4.3.3(vite@8.2.1(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.0))
-      astro:
-        specifier: 7.2.2
-        version: 7.2.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.3)(jiti@2.7.0)(yaml@2.9.0)
-      tailwindcss:
-        specifier: 4.3.3
-        version: 4.3.3
-    devDependencies:
-      '@astrojs/check':
-        specifier: 0.9.10
-        version: 0.9.10(prettier-plugin-astro@0.14.1)(prettier@3.9.6)(typescript@6.0.3)
-      '@repo/config':
-        specifier: workspace:*
-        version: link:../../packages/config
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-      wrangler:
-        specifier: 4.123.0
+        specifier: 'catalog:'
         version: 4.123.0
 
   packages/config:
     dependencies:
       astro:
-        specifier: 7.2.2
+        specifier: 'catalog:'
         version: 7.2.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.3)(jiti@2.7.0)(yaml@2.9.0)
       prettier:
-        specifier: 3.9.6
+        specifier: 'catalog:'
         version: 3.9.6
       prettier-plugin-astro:
-        specifier: 0.14.1
+        specifier: 'catalog:'
         version: 0.14.1
 
   packages/ui:
     dependencies:
       astro:
-        specifier: 7.2.2
+        specifier: 'catalog:'
         version: 7.2.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.3)(jiti@2.7.0)(yaml@2.9.0)
 
   templates/site-starter:
     dependencies:
       '@astrojs/sitemap':
-        specifier: 3.7.3
+        specifier: 'catalog:'
         version: 3.7.3
       '@fontsource-variable/inter':
-        specifier: 5.2.8
+        specifier: 'catalog:'
         version: 5.2.8
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       '@tailwindcss/vite':
-        specifier: 4.3.3
+        specifier: 'catalog:'
         version: 4.3.3(vite@8.2.1(@types/node@24.13.3)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.0))
       astro:
-        specifier: 7.2.2
+        specifier: 'catalog:'
         version: 7.2.2(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)(@types/node@24.13.3)(jiti@2.7.0)(yaml@2.9.0)
       tailwindcss:
-        specifier: 4.3.3
+        specifier: 'catalog:'
         version: 4.3.3
     devDependencies:
       '@astrojs/check':
-        specifier: 0.9.10
+        specifier: 'catalog:'
         version: 0.9.10(prettier-plugin-astro@0.14.1)(prettier@3.9.6)(typescript@6.0.3)
       '@repo/config':
         specifier: workspace:*
         version: link:../../packages/config
       typescript:
-        specifier: 6.0.3
+        specifier: 'catalog:'
         version: 6.0.3
       wrangler:
-        specifier: 4.123.0
+        specifier: 'catalog:'
         version: 4.123.0
 
 packages:

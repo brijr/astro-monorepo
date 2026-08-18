@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { createInterface } from "node:readline/promises";
 import {
   cp,
   mkdir,
@@ -8,16 +9,22 @@ import {
   readdir,
   rename,
   rm,
-  stat,
   writeFile,
 } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const TEMPLATE_NAME = "site-starter";
+import {
+  TEMPLATE_NAME,
+  exists,
+  findApp,
+  formatWorkersBuilds,
+  nextDevPort,
+  runPnpm,
+} from "./lib/apps.mjs";
+
 const TEMPLATE_TITLE = "Site Starter";
 const TEMPLATE_URL = "https://site-starter.example.com";
-const FIRST_DEV_PORT = 4321;
 const IGNORED_TEMPLATE_DIRECTORIES = new Set([
   ".astro",
   ".wrangler",
@@ -25,30 +32,53 @@ const IGNORED_TEMPLATE_DIRECTORIES = new Set([
   "node_modules",
 ]);
 
-function usage() {
-  return "Usage: pnpm site:new <kebab-case-name> --url <https-url> [--title <title>]";
+export function usage() {
+  return "Usage: pnpm site:new [<kebab-case-name> --url <https-url>] [--title <title>] [--dev] [--no-install]";
 }
 
 export function parseArguments(argv) {
-  const [name, ...flags] = argv;
-  const values = { name, title: undefined, url: undefined };
+  const values = {
+    name: undefined,
+    title: undefined,
+    url: undefined,
+    dev: false,
+    install: true,
+  };
 
-  for (let index = 0; index < flags.length; index += 1) {
-    const flag = flags[index];
-    const value = flags[index + 1];
+  for (let index = 0; index < argv.length; index += 1) {
+    const flag = argv[index];
 
-    if ((flag === "--title" || flag === "--url") && value) {
-      values[flag.slice(2)] = value;
+    if (flag === "--dev") {
+      values.dev = true;
+      continue;
+    }
+    if (flag === "--no-install") {
+      values.install = false;
+      continue;
+    }
+    if ((flag === "--title" || flag === "--url") && argv[index + 1]) {
+      values[flag.slice(2)] = argv[index + 1];
       index += 1;
       continue;
     }
-
-    throw new Error(
-      `Unknown or incomplete option: ${flag ?? "(missing)"}\n${usage()}`,
-    );
+    if (flag.startsWith("-")) {
+      throw new Error(`Unknown or incomplete option: ${flag}\n${usage()}`);
+    }
+    if (values.name) {
+      throw new Error(`Unexpected argument: ${flag}\n${usage()}`);
+    }
+    values.name = flag;
   }
 
-  return validateSiteInput(values);
+  if (!values.name || !values.url) {
+    return { ...values, incomplete: true };
+  }
+
+  return {
+    ...validateSiteInput(values),
+    dev: values.dev,
+    install: values.install,
+  };
 }
 
 export function validateSiteInput({ name, title, url }) {
@@ -105,40 +135,6 @@ export function assignDevPort(source, port) {
   );
 }
 
-export async function nextDevPort(appsDirectory) {
-  const used = new Set();
-
-  if (await exists(appsDirectory)) {
-    const entries = await readdir(appsDirectory, { withFileTypes: true });
-    for (const entry of entries) {
-      if (!entry.isDirectory() || entry.name.startsWith(".")) continue;
-      const configPath = path.join(
-        appsDirectory,
-        entry.name,
-        "astro.config.mjs",
-      );
-      if (!(await exists(configPath))) continue;
-      const source = await readFile(configPath, "utf8");
-      const match = source.match(/\bport:\s*(\d+)/);
-      if (match) used.add(Number(match[1]));
-    }
-  }
-
-  let port = FIRST_DEV_PORT;
-  while (used.has(port)) port += 1;
-  return port;
-}
-
-async function exists(target) {
-  try {
-    await stat(target);
-    return true;
-  } catch (error) {
-    if (error.code === "ENOENT") return false;
-    throw error;
-  }
-}
-
 async function listFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
   const files = [];
@@ -150,6 +146,33 @@ async function listFiles(directory) {
   }
 
   return files;
+}
+
+async function ask(question) {
+  const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  try {
+    return (await rl.question(question)).trim();
+  } finally {
+    rl.close();
+  }
+}
+
+export async function completeSiteInput(values) {
+  const next = { ...values };
+  if (!next.name) next.name = await ask("Site name (kebab-case): ");
+  if (!next.url) next.url = await ask("Canonical HTTPS URL: ");
+  if (!next.title) {
+    const title = await ask("Title (optional): ");
+    if (title) next.title = title;
+  }
+  return {
+    ...validateSiteInput(next),
+    dev: values.dev,
+    install: values.install,
+  };
 }
 
 export async function createSite({ name, title, url, rootDirectory }) {
@@ -195,7 +218,7 @@ export async function createSite({ name, title, url, rootDirectory }) {
 
     const configPath = path.join(stagingDirectory, "astro.config.mjs");
     if (await exists(configPath)) {
-      const port = await nextDevPort(appsDirectory);
+      const port = await nextDevPort(rootDirectory);
       const source = await readFile(configPath, "utf8");
       await writeFile(configPath, assignDevPort(source, port));
     }
@@ -209,17 +232,40 @@ export async function createSite({ name, title, url, rootDirectory }) {
   return destination;
 }
 
+export function formatCreatedSite(app) {
+  return `Created apps/${app.folder}
+Local  ${app.url}
+
+${formatWorkersBuilds(app)}
+Next
+pnpm --filter ${app.name} dev
+pnpm site:cf ${app.name}
+`;
+}
+
 async function main() {
-  const input = parseArguments(process.argv.slice(2));
-  const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
-  const rootDirectory = path.resolve(scriptDirectory, "..");
-  const destination = await createSite({ ...input, rootDirectory });
-  process.stdout.write(
-    `Created ${path.relative(rootDirectory, destination)}\n`,
+  let input = parseArguments(process.argv.slice(2));
+  if (input.incomplete) {
+    if (!process.stdin.isTTY) throw new Error(usage());
+    input = await completeSiteInput(input);
+  }
+
+  const rootDirectory = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "..",
   );
-  process.stdout.write(
-    `Next: pnpm install && pnpm --filter ${input.name} dev\n`,
-  );
+  await createSite({ ...input, rootDirectory });
+
+  if (input.install) {
+    await runPnpm(["install"], { cwd: rootDirectory });
+  }
+
+  const app = await findApp(rootDirectory, input.name);
+  process.stdout.write(formatCreatedSite(app));
+
+  if (input.dev) {
+    await runPnpm(["--filter", app.name, "dev"], { cwd: rootDirectory });
+  }
 }
 
 const isCLI =

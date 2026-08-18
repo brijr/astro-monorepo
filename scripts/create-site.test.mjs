@@ -13,10 +13,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 
+import { nextDevPort } from "./lib/apps.mjs";
 import {
   assignDevPort,
   createSite,
-  nextDevPort,
   parseArguments,
   validateSiteInput,
 } from "./create-site.mjs";
@@ -34,8 +34,21 @@ test("parses required and optional arguments", () => {
       name: "field-notes",
       title: "Field Notes",
       url: "https://field-notes.example",
+      dev: false,
+      install: true,
     },
   );
+});
+
+test("keeps site:new interactive when required flags are missing", () => {
+  assert.deepEqual(parseArguments([]), {
+    name: undefined,
+    title: undefined,
+    url: undefined,
+    dev: false,
+    install: true,
+    incomplete: true,
+  });
 });
 
 test("derives a title and normalizes the URL", () => {
@@ -66,23 +79,31 @@ test("rejects invalid names and URLs", () => {
 });
 
 test("assigns the next unused local port", async (context) => {
-  const appsDirectory = await mkdtemp(path.join(os.tmpdir(), "astro-ports-"));
-  context.after(() => rm(appsDirectory, { recursive: true, force: true }));
+  const rootDirectory = await mkdtemp(path.join(os.tmpdir(), "astro-ports-"));
+  context.after(() => rm(rootDirectory, { recursive: true, force: true }));
 
-  assert.equal(await nextDevPort(appsDirectory), 4321);
+  assert.equal(await nextDevPort(rootDirectory), 4321);
 
-  await mkdir(path.join(appsDirectory, "site-one"), { recursive: true });
+  await mkdir(path.join(rootDirectory, "apps", "site"), { recursive: true });
   await writeFile(
-    path.join(appsDirectory, "site-one", "astro.config.mjs"),
+    path.join(rootDirectory, "apps", "site", "package.json"),
+    JSON.stringify({ name: "site" }),
+  );
+  await writeFile(
+    path.join(rootDirectory, "apps", "site", "astro.config.mjs"),
     "server: { port: 4321 }\n",
   );
-  await mkdir(path.join(appsDirectory, "site-two"), { recursive: true });
+  await mkdir(path.join(rootDirectory, "apps", "notes"), { recursive: true });
   await writeFile(
-    path.join(appsDirectory, "site-two", "astro.config.mjs"),
+    path.join(rootDirectory, "apps", "notes", "package.json"),
+    JSON.stringify({ name: "notes" }),
+  );
+  await writeFile(
+    path.join(rootDirectory, "apps", "notes", "astro.config.mjs"),
     "server: { port: 4322 }\n",
   );
 
-  assert.equal(await nextDevPort(appsDirectory), 4323);
+  assert.equal(await nextDevPort(rootDirectory), 4323);
   assert.match(
     assignDevPort(
       'output: "static",\n  server: {\n    port: 4399,\n  },',
